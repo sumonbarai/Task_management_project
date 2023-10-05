@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-
+const bcrypt = require("bcrypt");
 const dataSchema = new Schema(
   {
     email: {
@@ -23,6 +23,9 @@ const dataSchema = new Schema(
     password: {
       type: String,
       required: [true, "password is required"],
+      set: (v) => {
+        return bcrypt.hashSync(v, bcrypt.genSaltSync(10));
+      },
     },
     photo: {
       type: String,
