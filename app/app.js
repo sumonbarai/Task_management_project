@@ -1,5 +1,5 @@
 const express = require("express");
-const path = require("node:path");
+const path = require("path");
 const middleware = require("./middleware");
 const router = require("../src/routes/api");
 const notFoundHandler = require("./notFoundHandler");
