@@ -7,7 +7,6 @@ const customError = require("../../utils/customeError");
 const registerUser = async (req, res, next) => {
   try {
     const reqBody = req.body;
-    console.log(reqBody);
     if (!reqBody.email) {
       throw customError(400, "user email required");
     }

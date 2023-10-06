@@ -1,18 +1,20 @@
 const { Schema, model } = require("mongoose");
-const { schema } = require("./UserModel");
 
 const dataSchema = new Schema(
   {
-    _id: {
+    userId: {
       type: Schema.Types.ObjectId,
-      required: [true, "_id is required"],
+      required: [true, "userId is required"],
     },
-
+    title: {
+      type: String,
+      required: [true, "title is required"],
+    },
     description: {
       type: String,
-      required: [true, "description is required"],
     },
     status: {
+      type: String,
       enum: ["new", "pending", "completed"],
       default: "new",
     },
