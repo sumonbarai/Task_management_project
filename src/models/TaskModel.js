@@ -15,7 +15,7 @@ const dataSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["new", "pending", "completed"],
+      enum: ["new", "pending", "completed", "canceled"],
       default: "new",
     },
   },
