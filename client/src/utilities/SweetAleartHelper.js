@@ -33,7 +33,7 @@ const updateAlert = (_id, status) => {
     inputOptions: {
       new: "new",
       completed: "completed",
-      progress: "progress",
+      pending: "pending",
       canceled: "canceled",
     },
     inputValue: status,

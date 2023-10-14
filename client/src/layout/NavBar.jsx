@@ -64,7 +64,10 @@ const NavBar = ({ handleShow }) => {
                 <h6 className="pt-2">{fistName + " " + lastName}</h6>
               </div>
               <ul style={{ listStyle: "none" }} className="fs-6 fw-medium">
-                <li className="customHover" onClick={() => navigate("/")}>
+                <li
+                  className="customHover"
+                  onClick={() => navigate("/profile")}
+                >
                   <span className="fs-5 px-1">
                     <GoPeople />
                   </span>{" "}

@@ -16,6 +16,7 @@ import { getLocalStorage } from "./utilities/SessionHelper";
 import { loggedIn } from "./redux/features/auth/authSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import Profile from "./pages/Profile";
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ function App() {
           <Route path="progress" element={<Progress />} />
           <Route path="completed" element={<Completed />} />
           <Route path="canceled" element={<Canceled />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<Login />} />

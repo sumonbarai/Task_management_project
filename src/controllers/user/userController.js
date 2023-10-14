@@ -23,6 +23,7 @@ const profileUpdate = async (req, res, next) => {
     // response to client
     return res.status(200).json({
       message: "update successfully",
+      data: user,
     });
   } catch (error) {
     next(error);

@@ -18,11 +18,23 @@ export const registrationThunk = createAsyncThunk(
     }
   }
 );
+
 export const loginThunk = createAsyncThunk(
   "auth/loginThunk",
   async (data, { rejectWithValue }) => {
     try {
       const res = await axios.post("/login", data);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message);
+    }
+  }
+);
+export const profileUpdateThunk = createAsyncThunk(
+  "auth/profileUpdateThunk",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.post("/profileUpdate", data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message);
@@ -81,6 +93,24 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
       state.user = null;
+    });
+
+    // for update profile thunk
+
+    builder.addCase(profileUpdateThunk.pending, (state) => {
+      state.isLoading = true;
+      state.error = "";
+    });
+
+    builder.addCase(profileUpdateThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = "";
+      state.user = action.payload;
+    });
+
+    builder.addCase(profileUpdateThunk.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     });
   },
 });
