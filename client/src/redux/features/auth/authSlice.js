@@ -105,7 +105,7 @@ const authSlice = createSlice({
     builder.addCase(profileUpdateThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = "";
-      state.user = action.payload;
+      state.user = { ...state.user, data: action.payload.data };
     });
 
     builder.addCase(profileUpdateThunk.rejected, (state, action) => {

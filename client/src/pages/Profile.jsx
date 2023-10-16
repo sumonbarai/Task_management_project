@@ -65,7 +65,6 @@ const Profile = () => {
       dispatch(profileUpdateThunk(data))
         .unwrap()
         .then((data) => {
-          console.log(data);
           if (data) {
             navigate("/");
           }

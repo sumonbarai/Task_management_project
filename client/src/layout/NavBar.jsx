@@ -38,8 +38,7 @@ const NavBar = ({ handleShow }) => {
         </Link>
         <div className="dropdown">
           <img
-            width={40}
-            height={40}
+            style={{ width: "40px", height: "40px", objectFit: "cover" }}
             className=" dropdown-toggle rounded-circle img-fluid "
             src={photo ? photo : defaultAvata}
             data-bs-toggle="dropdown"
@@ -55,9 +54,8 @@ const NavBar = ({ handleShow }) => {
             <div>
               <div className="text-center">
                 <img
-                  className="  rounded-circle img-fluid"
-                  width={60}
-                  height={60}
+                  className="  rounded-circle img-fluid object-fit-cover"
+                  style={{ width: "60px", height: "60px", objectFit: "cover" }}
                   src={photo ? photo : defaultAvata}
                   alt="profile"
                 />

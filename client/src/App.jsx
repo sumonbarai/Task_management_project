@@ -17,6 +17,9 @@ import { loggedIn } from "./redux/features/auth/authSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Profile from "./pages/Profile";
+import SendOTP from "./pages/SendOTP";
+import VerifyOTP from "./pages/VerifyOTP";
+import PasswordRecovery from "./pages/PasswordRecovery";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,6 +52,9 @@ function App() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/sendOtp" element={<SendOTP />} />
+        <Route path="/verifyOtp" element={<VerifyOTP />} />
+        <Route path="/passwordRecovery" element={<PasswordRecovery />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
       <Toaster />
