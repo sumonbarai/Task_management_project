@@ -22,7 +22,7 @@ const authVerifyMiddleware = async (req, res, next) => {
         });
       }
       // if token is valid and user in my database
-      const user = await findUserByProperty({ _id: decoded._id });
+      const user = await findUserByProperty("_id", decoded._id);
       if (!user) throw customError(401, "invalid token");
 
       req.headers._id = decoded._id;

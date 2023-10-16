@@ -1,44 +1,55 @@
 import { useState } from "react";
 import ReactCodeInput from "react-code-input";
+import Loader from "../components/Loader/Loader";
+import {
+  errorNotification,
+  successNotification,
+} from "../utilities/NotificationHelper";
+import axios from "axios";
+import { getLocalStorage, setLocalStorage } from "../utilities/SessionHelper";
+import { Navigate } from "react-router-dom";
 
 const VerifyOTP = () => {
   const [code, setCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const email = getLocalStorage("email");
 
+  // handle code
   const handleChange = (value) => {
     setCode(value);
   };
-  console.log(code);
+
   // handleSubmit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    // // checking validation
-    // const isValidEmail = validateEmail(data.email);
+    try {
+      if (!email) {
+        return errorNotification("email code required");
+      }
 
-    // // email check
-    // if (!isValidEmail) {
-    //   inputFieldError("Please input valid email address");
-    // }
+      if (!code) {
+        return errorNotification("otp code required");
+      }
 
-    // everything is ok now send registration request
-    // if (isValidEmail) {
-    // dispatch(loginThunk({ email, password }))
-    //   .unwrap()
-    //   .then((data) => {
-    //     if (data.token) {
-    //       const result = setLocalStorage("user", data);
-    //       if (result) {
-    //         successNotification("login success");
-    //         navigate("/");
-    //       }
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     errorNotification(error);
-    //   });
+      if (!(code.length === 6)) {
+        return errorNotification("Otp code must be 6 character");
+      }
 
-    console.log(code);
+      const result = await axios.get(`verifyOtp/${email}/${code}`);
+
+      successNotification(result?.data?.message);
+      setLocalStorage("email", email);
+      Navigate("/passwordRecovery");
+    } catch (error) {
+      errorNotification("something is wrong");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
     <div className="vh-100 vw-100 bg-body-secondary d-flex justify-content-center align-items-center    ">
       <div className="p-3">
@@ -67,6 +78,7 @@ const VerifyOTP = () => {
           </form>
         </div>
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };

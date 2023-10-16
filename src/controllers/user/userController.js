@@ -6,7 +6,7 @@ const profileUpdate = async (req, res, next) => {
   try {
     const reqBody = req.body;
     const _id = req.headers._id;
-    const user = await findUserByProperty({ _id: _id });
+    const user = await findUserByProperty("_id", _id);
 
     // checking user is exits or not
     if (!user) {

@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { inputFieldError, validateEmail } from "../utilities/Fromhelper";
+import axios from "axios";
+import {
+  errorNotification,
+  successNotification,
+} from "../utilities/NotificationHelper";
+import { setLocalStorage } from "../utilities/SessionHelper";
+import Loader from "../components/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   email: "",
@@ -7,6 +15,8 @@ const initialState = {
 
 const SendOTP = () => {
   const [data, setData] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (property, value) => {
     setData({
@@ -16,35 +26,31 @@ const SendOTP = () => {
   };
 
   // handleSubmit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    // checking validation
-    const isValidEmail = validateEmail(data.email);
+    try {
+      // checking validation
+      const isValidEmail = validateEmail(data.email);
 
-    // email check
-    if (!isValidEmail) {
-      inputFieldError("Please input valid email address");
-    }
+      // email check
+      if (!isValidEmail) {
+        return inputFieldError("Please input valid email address");
+      }
+      // everything is ok now send opt request
+      if (isValidEmail) {
+        const result = await axios.get(`/sendOtp/${data.email}`);
 
-    // everything is ok now send registration request
-    if (isValidEmail) {
-      // dispatch(loginThunk({ email, password }))
-      //   .unwrap()
-      //   .then((data) => {
-      //     if (data.token) {
-      //       const result = setLocalStorage("user", data);
-      //       if (result) {
-      //         successNotification("login success");
-      //         navigate("/");
-      //       }
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     errorNotification(error);
-      //   });
-
-      console.log("submit");
+        successNotification(result?.data?.message);
+        setLocalStorage("email", data.email);
+        navigate("/verifyOtp");
+      }
+    } catch (error) {
+      errorNotification("something is wrong");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,6 +85,7 @@ const SendOTP = () => {
           </form>
         </div>
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };

@@ -7,12 +7,13 @@ const customError = require("../../utils/customeError");
 const sendOTP = async (req, res, next) => {
   try {
     const { email } = req.params;
-    const user = await findUserByProperty({ email: email });
+    const user = await findUserByProperty("email", email);
 
     // checking user is exits or not
     if (!user) {
       throw customError(404, "email is not registered");
     }
+
     const otpCode = Math.floor(Math.random() * (900000 - 100000 + 1)) + 100000;
 
     // implement upset method in otp model
