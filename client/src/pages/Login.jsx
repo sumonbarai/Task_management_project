@@ -113,6 +113,14 @@ const Login = () => {
               </Link>
             </span>
           </p>
+          <p>
+            <span className="text-orange-500">
+              <Link to="/sendOtp" style={{ color: "#D980FA" }}>
+                {" "}
+                Forgotten password?
+              </Link>
+            </span>
+          </p>
           {error && <p className="text-danger">{error}</p>}
         </div>
       </div>

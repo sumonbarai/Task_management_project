@@ -7,11 +7,12 @@ import {
 } from "../utilities/NotificationHelper";
 import axios from "axios";
 import { getLocalStorage, setLocalStorage } from "../utilities/SessionHelper";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VerifyOTP = () => {
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const email = getLocalStorage("email");
 
   // handle code
@@ -41,10 +42,9 @@ const VerifyOTP = () => {
 
       successNotification(result?.data?.message);
       setLocalStorage("email", email);
-      Navigate("/passwordRecovery");
+      navigate("/passwordRecovery");
     } catch (error) {
-      errorNotification("something is wrong");
-      console.log(error);
+      errorNotification(error?.response?.data?.message);
     } finally {
       setIsLoading(false);
     }

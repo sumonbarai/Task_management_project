@@ -47,8 +47,7 @@ const SendOTP = () => {
         navigate("/verifyOtp");
       }
     } catch (error) {
-      errorNotification("something is wrong");
-      console.log(error);
+      errorNotification(error?.response?.data?.message);
     } finally {
       setIsLoading(false);
     }

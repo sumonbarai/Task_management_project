@@ -1,4 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getLocalStorage,
+  removeLocalStorage,
+} from "../utilities/SessionHelper";
+import Loader from "../components/Loader/Loader";
+import axios from "axios";
+import {
+  errorNotification,
+  successNotification,
+} from "../utilities/NotificationHelper";
 
 const initialState = {
   email: "",
@@ -8,6 +19,9 @@ const initialState = {
 
 const PasswordRecovery = () => {
   const [data, setData] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const email = getLocalStorage("email");
 
   const handleChange = (property, value) => {
     setData({
@@ -16,9 +30,35 @@ const PasswordRecovery = () => {
     });
   };
 
+  // first time save the email state from local storage
+  useEffect(() => {
+    handleChange("email", email);
+  }, []);
+
   // handleSubmit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (data.password !== data.confirmPassword) {
+        return errorNotification("password does't match");
+      }
+
+      // reset password request
+      const result = await axios.post(`/resetPassword`, {
+        email: data.email,
+        password: data.password,
+      });
+
+      successNotification(result?.data?.message);
+      navigate("/login");
+      removeLocalStorage("email");
+    } catch (error) {
+      errorNotification(error?.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,10 +73,10 @@ const PasswordRecovery = () => {
             <div className="col-12 ">
               <input
                 type="email"
-                className="form-control focus-ring  custom animate__animated animate__fadeInUp"
+                className="form-control focus-ring  custom bg-body-secondary animate__animated animate__fadeInUp"
                 placeholder="Your Email"
-                onChange={(e) => handleChange("email", e.target.value)}
                 value={data.email}
+                readOnly
               />
             </div>
             <div className="col-12 ">
@@ -72,6 +112,7 @@ const PasswordRecovery = () => {
           </form>
         </div>
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };
