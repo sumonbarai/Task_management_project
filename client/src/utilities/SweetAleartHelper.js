@@ -4,7 +4,7 @@ import { errorNotification } from "./NotificationHelper";
 import store from "../redux/store/store";
 import { deleteTask, updateTask } from "../redux/features/task/taskSlice";
 
-const DeleteAlert = (_id) => {
+const DeleteAlert = (_id, status) => {
   Swal.fire({
     title: "Are you sure?",
     icon: "warning",
@@ -18,7 +18,7 @@ const DeleteAlert = (_id) => {
       if (response.status === 200) {
         Swal.fire("Deleted!", "Your Task has been deleted.", "success");
         // update redux store
-        store.dispatch(deleteTask(_id));
+        store.dispatch(deleteTask({ _id, status }));
       } else {
         errorNotification("something went wrong");
         console.log(response);
@@ -44,8 +44,11 @@ const updateAlert = (_id, status) => {
 
     if (response.status === 200) {
       Swal.fire("Updated!", "Your Task has been Updated.", "success");
+
       // update redux store
-      store.dispatch(updateTask({ _id, data: response.data.data }));
+      store.dispatch(
+        updateTask({ _id, data: response.data.data, status: status })
+      );
     } else {
       errorNotification("something went wrong");
       console.log(response);

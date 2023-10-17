@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getBase64 from "../utilities/base64";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 import { errorNotification } from "../utilities/NotificationHelper";
 import { profileUpdateThunk } from "../redux/features/auth/authSlice";
 import Loader from "../components/Loader/Loader";
+import { setLocalStorage } from "../utilities/SessionHelper";
 
 const Profile = () => {
   const { isLoading, user } = useSelector((state) => state.auth);
@@ -74,6 +75,10 @@ const Profile = () => {
         });
     }
   };
+
+  useEffect(() => {
+    setLocalStorage("user", user);
+  }, [user]);
 
   return (
     <div className="container-fluid">

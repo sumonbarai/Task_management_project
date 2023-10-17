@@ -1,9 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { MdCreate, MdFiberNew, MdCancelPresentation } from "react-icons/md";
 import { GrInProgress } from "react-icons/gr";
 import { BsCheckCircle } from "react-icons/bs";
 const SideMenu = ({ show }) => {
+  const navigate = useNavigate();
   const path = useLocation().pathname;
 
   const widthControl = show
@@ -21,6 +22,7 @@ const SideMenu = ({ show }) => {
       <ul style={{ listStyle: "none" }} className="p-0 ">
         <li
           className={`p-2  mb-1  customHover ${path === "/" ? "active" : ""}`}
+          onClick={() => navigate("/")}
         >
           <span className="text-black fs-5 pe-2">
             <TbLayoutDashboard />
@@ -33,6 +35,7 @@ const SideMenu = ({ show }) => {
           className={`p-2  mb-1  customHover ${
             path === "/create" ? "active" : ""
           }`}
+          onClick={() => navigate("/create")}
         >
           <span className="text-black fs-5 pe-2">
             <MdCreate />
@@ -45,6 +48,7 @@ const SideMenu = ({ show }) => {
           className={`p-2  mb-1  customHover ${
             path === "/new" ? "active" : ""
           }`}
+          onClick={() => navigate("/new")}
         >
           <span className="text-black fs-5 pe-2">
             <MdFiberNew />
@@ -57,6 +61,7 @@ const SideMenu = ({ show }) => {
           className={`p-2  mb-1  customHover ${
             path === "/progress" ? "active" : ""
           }`}
+          onClick={() => navigate("/progress")}
         >
           <span className="text-black fs-5 pe-2">
             <GrInProgress />
@@ -69,6 +74,7 @@ const SideMenu = ({ show }) => {
           className={`p-2  mb-1  customHover ${
             path === "/completed" ? "active" : ""
           }`}
+          onClick={() => navigate("/completed")}
         >
           <span className="text-black fs-5 pe-2">
             <BsCheckCircle />
@@ -81,6 +87,7 @@ const SideMenu = ({ show }) => {
           className={`p-2  mb-1  customHover ${
             path === "/canceled" ? "active" : ""
           }`}
+          onClick={() => navigate("/canceled")}
         >
           <span className="text-black fs-5 pe-2">
             <MdCancelPresentation />

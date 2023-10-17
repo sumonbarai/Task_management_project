@@ -20,16 +20,20 @@ import VerifyOTP from "./pages/VerifyOTP";
 import PasswordRecovery from "./pages/PasswordRecovery";
 import useAuthCheck from "./hooks/useAuthCheck";
 import { useEffect } from "react";
+import { getLocalStorage } from "./utilities/SessionHelper";
 
 function App() {
   const [data, setData] = useAuthCheck();
   const { user } = useSelector((state) => state.auth);
+  const userinfo = getLocalStorage("user");
 
   // default base url
   axios.defaults.baseURL =
     "https://task-management-project.onrender.com/api/v1";
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${data?.token}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${
+    data?.token ?? userinfo?.token
+  }`;
 
   useEffect(() => {
     setData(user);

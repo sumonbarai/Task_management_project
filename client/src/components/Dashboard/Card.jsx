@@ -40,7 +40,7 @@ const Card = ({ _id, title, count, description, date, status }) => {
                 className="px-2"
                 role="button"
                 style={{ color: "#b315f2" }}
-                onClick={() => DeleteAlert(_id)}
+                onClick={() => DeleteAlert(_id, status)}
               >
                 <AiOutlineDelete />
               </span>

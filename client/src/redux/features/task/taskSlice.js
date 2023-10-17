@@ -4,7 +4,11 @@ import axios from "axios";
 const initialState = {
   isLoading: false,
   error: "",
-  task: [],
+  dashboard: [],
+  new: [],
+  completed: [],
+  pending: [],
+  canceled: [],
 };
 
 export const createTaskThunk = createAsyncThunk(
@@ -46,20 +50,20 @@ const taskSlice = createSlice({
   initialState,
   reducers: {
     deleteTask: (state, action) => {
-      const remainingTask = state.task.filter(
-        (item) => item._id !== action.payload
-      );
-
-      state.task = remainingTask;
-      state.isLoading = false;
-      state.error = "";
-    },
-    updateTask: (state, action) => {
-      const remainingTask = state.task.filter(
+      const remainingTask = state[action.payload.status].filter(
         (item) => item._id !== action.payload._id
       );
 
-      state.task = [...remainingTask, action.payload?.data];
+      state.isLoading = false;
+      state.error = "";
+      state[action.payload.status] = remainingTask;
+    },
+    updateTask: (state, action) => {
+      const remainingTask = state[action.payload.status].filter(
+        (item) => item._id !== action.payload._id
+      );
+      console.log(action.payload.status);
+      state[action.payload.status] = [...remainingTask];
       state.isLoading = false;
       state.error = "";
     },
@@ -75,7 +79,7 @@ const taskSlice = createSlice({
     builder.addCase(createTaskThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = "";
-      state.task = [...state.task, action.payload.data];
+      state.new = [...state.new, action.payload.data];
     });
 
     builder.addCase(createTaskThunk.rejected, (state, action) => {
@@ -87,37 +91,34 @@ const taskSlice = createSlice({
     builder.addCase(getTaskByStatusThunk.pending, (state) => {
       state.isLoading = true;
       state.error = "";
-      state.task = [];
     });
 
     builder.addCase(getTaskByStatusThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = "";
-      state.task = action.payload.data;
+      state[action.payload.data[0]?.status] = action.payload.data;
     });
 
     builder.addCase(getTaskByStatusThunk.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-      state.task = [];
     });
     // get taskByStatusCount
     builder.addCase(taskByStatusCountThank.pending, (state) => {
       state.isLoading = true;
       state.error = "";
-      state.task = [];
+      state.dashboard = [];
     });
 
     builder.addCase(taskByStatusCountThank.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = "";
-      state.task = action.payload.data;
+      state.dashboard = action.payload.data;
     });
 
     builder.addCase(taskByStatusCountThank.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-      state.task = [];
     });
   },
 });

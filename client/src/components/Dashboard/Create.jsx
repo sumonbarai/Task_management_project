@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   errorNotification,
   successNotification,
@@ -15,10 +15,19 @@ const initialState = {
   description: "",
 };
 const Create = () => {
-  const { isLoading } = useSelector((state) => state.task);
+  const { isLoading, error } = useSelector((state) => state.task);
   const [data, setData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // if user token has expired
+  useEffect(() => {
+    if (error.status === 403) {
+      dispatch(loggedOut());
+      removeLocalStorage("user");
+      errorNotification("your token expired please login");
+    }
+  }, [dispatch, error.status]);
 
   // state change handler
   const handleChange = (property, value) => {
