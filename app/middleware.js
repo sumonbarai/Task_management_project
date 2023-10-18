@@ -14,7 +14,7 @@ const limiter = rateLimit({
 const middleware = [
   morgan("dev"),
   cors({
-    origin: "*",
+    origin: "https://taskmanager-service.netlify.app",
   }),
   helmet(),
   mongoSanitize(),
