@@ -55,9 +55,10 @@ const Login = () => {
         .then((data) => {
           if (data.token) {
             const result = setLocalStorage("user", data);
+
             if (result) {
               successNotification("login success");
-              navigate("/");
+              window.location.href = "/";
             }
           }
         })

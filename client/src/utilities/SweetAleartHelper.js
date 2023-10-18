@@ -3,8 +3,10 @@ import Swal from "sweetalert2";
 import { errorNotification } from "./NotificationHelper";
 import store from "../redux/store/store";
 import { deleteTask, updateTask } from "../redux/features/task/taskSlice";
+import { getLocalStorage } from "./SessionHelper";
 
 const DeleteAlert = (_id, status) => {
+  const user = getLocalStorage("user");
   Swal.fire({
     title: "Are you sure?",
     icon: "warning",
@@ -14,7 +16,11 @@ const DeleteAlert = (_id, status) => {
     confirmButtonText: "Yes, delete it!",
   }).then(async (result) => {
     if (result.isConfirmed) {
-      const response = await axios.delete(`/deleteTask/${_id}`);
+      const response = await axios.delete(`/deleteTask/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
       if (response.status === 200) {
         Swal.fire("Deleted!", "Your Task has been deleted.", "success");
         // update redux store
@@ -27,6 +33,7 @@ const DeleteAlert = (_id, status) => {
   });
 };
 const updateAlert = (_id, status) => {
+  const user = getLocalStorage("user");
   Swal.fire({
     title: "Change Status",
     input: "select",
@@ -38,20 +45,29 @@ const updateAlert = (_id, status) => {
     },
     inputValue: status,
   }).then(async (result) => {
-    const response = await axios.patch(
-      `updateTaskByStatus/${_id}/${result.value}`
-    );
-
-    if (response.status === 200) {
-      Swal.fire("Updated!", "Your Task has been Updated.", "success");
-
-      // update redux store
-      store.dispatch(
-        updateTask({ _id, data: response.data.data, status: status })
+    if (result) {
+      const response = await axios.patch(
+        `updateTaskByStatus/${_id}/${result.value}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
       );
-    } else {
-      errorNotification("something went wrong");
-      console.log(response);
+      if (response.status === 200) {
+        Swal.fire("Updated!", "Your Task has been Updated.", "success");
+
+        if (response?.data?.data?.status !== status) {
+          // update redux store
+          store.dispatch(
+            updateTask({ _id, data: response.data.data, status: status })
+          );
+        }
+      } else {
+        errorNotification("something went wrong");
+        console.log(response);
+      }
     }
   });
 };

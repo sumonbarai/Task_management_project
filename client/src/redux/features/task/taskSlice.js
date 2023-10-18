@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getLocalStorage } from "../../../utilities/SessionHelper";
+
+const user = getLocalStorage("user");
 
 const initialState = {
   isLoading: false,
@@ -15,7 +18,11 @@ export const createTaskThunk = createAsyncThunk(
   "task/createTaskThunk",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post("/createTask", data);
+      const res = await axios.post("/createTask", data, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response);
@@ -26,7 +33,11 @@ export const getTaskByStatusThunk = createAsyncThunk(
   "task/getTaskByStatusThunk",
   async (status, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/listTaskByStatus/${status}`);
+      const res = await axios.get(`/listTaskByStatus/${status}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response);
@@ -37,7 +48,12 @@ export const taskByStatusCountThank = createAsyncThunk(
   "task/taskByStatusCountThank",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/TaskByStatusCount`);
+      const res = await axios.get(`/TaskByStatusCount`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response);
@@ -62,7 +78,7 @@ const taskSlice = createSlice({
       const remainingTask = state[action.payload.status].filter(
         (item) => item._id !== action.payload._id
       );
-      console.log(action.payload.status);
+
       state[action.payload.status] = [...remainingTask];
       state.isLoading = false;
       state.error = "";

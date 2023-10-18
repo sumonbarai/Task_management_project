@@ -26,8 +26,9 @@ const Create = () => {
       dispatch(loggedOut());
       removeLocalStorage("user");
       errorNotification("your token expired please login");
+      window.location.href = "/login";
     }
-  }, [dispatch, error.status]);
+  }, [error.status]);
 
   // state change handler
   const handleChange = (property, value) => {

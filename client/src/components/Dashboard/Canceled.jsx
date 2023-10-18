@@ -12,18 +12,20 @@ const Canceled = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getTaskByStatusThunk("canceled"));
+  }, [dispatch]);
+
   // if user token has expired
   useEffect(() => {
     if (error.status === 403) {
       dispatch(loggedOut());
       removeLocalStorage("user");
       errorNotification("your token expired please login");
+      window.location.href = "/login";
     }
   }, [dispatch, error.status]);
 
-  useEffect(() => {
-    dispatch(getTaskByStatusThunk("canceled"));
-  }, [dispatch]);
   return (
     <div className="container-fluid pt-3">
       <div className="row row-cols-1 row-cols-md-2 row-cols-xxl-3 g-3">

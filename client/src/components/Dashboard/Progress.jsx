@@ -12,18 +12,19 @@ const Progress = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getTaskByStatusThunk("pending"));
+  }, [dispatch]);
+
   // if user token has expired
   useEffect(() => {
     if (error.status === 403) {
       dispatch(loggedOut());
       removeLocalStorage("user");
       errorNotification("your token expired please login");
+      window.location.href = "/login";
     }
   }, [dispatch, error.status]);
-
-  useEffect(() => {
-    dispatch(getTaskByStatusThunk("pending"));
-  }, [dispatch]);
 
   return (
     <div className="container-fluid pt-3">

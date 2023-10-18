@@ -13,31 +13,31 @@ import Register from "./pages/Register";
 import { Toaster } from "react-hot-toast";
 import axios from "axios";
 
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Profile from "./pages/Profile";
 import SendOTP from "./pages/SendOTP";
 import VerifyOTP from "./pages/VerifyOTP";
 import PasswordRecovery from "./pages/PasswordRecovery";
-import useAuthCheck from "./hooks/useAuthCheck";
-import { useEffect } from "react";
+
 import { getLocalStorage } from "./utilities/SessionHelper";
+import { loggedIn } from "./redux/features/auth/authSlice";
+import { useEffect } from "react";
 
 function App() {
-  const [data, setData] = useAuthCheck();
-  const { user } = useSelector((state) => state.auth);
-  const userinfo = getLocalStorage("user");
-
   // default base url
   axios.defaults.baseURL =
     "https://task-management-project.onrender.com/api/v1";
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${
-    data?.token ?? userinfo?.token
-  }`;
+  // axios.defaults.baseURL = "http://localhost:8000/api/v1";
+
+  const dispatch = useDispatch();
+  const user = getLocalStorage("user");
 
   useEffect(() => {
-    setData(user);
-  }, [user, setData]);
+    if (user) {
+      dispatch(loggedIn(user));
+    }
+  }, [user, dispatch]);
 
   return (
     <BrowserRouter>
