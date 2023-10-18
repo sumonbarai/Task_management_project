@@ -11,6 +11,7 @@ const app = express();
 // only for accept my client side application
 app.use((req, res, next) => {
   const hostName = req.hostname;
+  console.log(hostName);
   if (hostName !== "taskmanager-service.netlify.app") {
     throw customError(406, "your request not acceptable");
   }
