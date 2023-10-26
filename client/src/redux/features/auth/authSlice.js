@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getLocalStorage } from "../../../utilities/SessionHelper";
-
-const user = getLocalStorage("user");
 
 const initialState = {
   isLoading: false,
@@ -37,11 +34,7 @@ export const profileUpdateThunk = createAsyncThunk(
   "auth/profileUpdateThunk",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post("/profileUpdate", data, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const res = await axios.post("/profileUpdate", data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data?.message);

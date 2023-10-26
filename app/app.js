@@ -11,6 +11,7 @@ const app = express();
 // // only for accept my client side application
 app.use((req, res, next) => {
   const myClientApplication = req.headers.origin;
+
   if (myClientApplication !== "https://taskmanager-service.netlify.app") {
     throw customError(406, "your request not acceptable");
   }

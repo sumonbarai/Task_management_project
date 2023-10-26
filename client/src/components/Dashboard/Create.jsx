@@ -4,7 +4,10 @@ import {
   successNotification,
 } from "../../utilities/NotificationHelper";
 import { useDispatch, useSelector } from "react-redux";
-import { createTaskThunk } from "../../redux/features/task/taskSlice";
+import {
+  clearTask,
+  createTaskThunk,
+} from "../../redux/features/task/taskSlice";
 import Loader from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { loggedOut } from "../../redux/features/auth/authSlice";
@@ -22,13 +25,14 @@ const Create = () => {
 
   // if user token has expired
   useEffect(() => {
-    if (error.status === 403) {
+    if (error?.status === 403) {
       dispatch(loggedOut());
+      dispatch(clearTask());
       removeLocalStorage("user");
       errorNotification("your token expired please login");
-      window.location.href = "/login";
+      navigate("/login");
     }
-  }, [error.status]);
+  }, [error?.status]);
 
   // state change handler
   const handleChange = (property, value) => {

@@ -1,16 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
-import { getTaskByStatusThunk } from "../../redux/features/task/taskSlice";
+import {
+  clearTask,
+  getTaskByStatusThunk,
+} from "../../redux/features/task/taskSlice";
 import { useEffect } from "react";
 import Loader from "../Loader/Loader";
 import { loggedOut } from "../../redux/features/auth/authSlice";
 import { removeLocalStorage } from "../../utilities/SessionHelper";
 import { errorNotification } from "../../utilities/NotificationHelper";
+import { useNavigate } from "react-router-dom";
 
 const Completed = () => {
-  const { isLoading, completed, error } = useSelector((state) => state.task);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { isLoading, completed, error } = useSelector((state) => state.task);
 
   useEffect(() => {
     dispatch(getTaskByStatusThunk("completed"));
@@ -18,13 +23,14 @@ const Completed = () => {
 
   // if user token has expired
   useEffect(() => {
-    if (error.status === 403) {
+    if (error?.status === 403) {
       dispatch(loggedOut());
+      dispatch(clearTask());
       removeLocalStorage("user");
       errorNotification("your token expired please login");
-      window.location.href = "/login";
+      navigate("/login");
     }
-  }, [dispatch, error.status]);
+  }, [dispatch, error?.status]);
 
   return (
     <div className="container-fluid pt-3">

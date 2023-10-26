@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getLocalStorage } from "../../../utilities/SessionHelper";
-
-const user = getLocalStorage("user");
 
 const initialState = {
   isLoading: false,
@@ -18,11 +15,7 @@ export const createTaskThunk = createAsyncThunk(
   "task/createTaskThunk",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post("/createTask", data, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const res = await axios.post("/createTask", data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response);
@@ -33,11 +26,7 @@ export const getTaskByStatusThunk = createAsyncThunk(
   "task/getTaskByStatusThunk",
   async (status, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/listTaskByStatus/${status}`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const res = await axios.get(`/listTaskByStatus/${status}`);
       return res.data;
     } catch (error) {
       return rejectWithValue(error?.response);
@@ -48,11 +37,7 @@ export const taskByStatusCountThank = createAsyncThunk(
   "task/taskByStatusCountThank",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`/TaskByStatusCount`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const res = await axios.get(`/TaskByStatusCount`);
 
       return res.data;
     } catch (error) {
@@ -65,6 +50,15 @@ const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
+    clearTask: (state) => {
+      state.isLoading = false;
+      state.error = "";
+      state.dashboard = [];
+      state.new = [];
+      state.completed = [];
+      state.pending = [];
+      state.canceled = [];
+    },
     deleteTask: (state, action) => {
       const remainingTask = state[action.payload.status].filter(
         (item) => item._id !== action.payload._id
@@ -140,4 +134,4 @@ const taskSlice = createSlice({
 });
 
 export default taskSlice.reducer;
-export const { deleteTask, updateTask } = taskSlice.actions;
+export const { deleteTask, updateTask, clearTask } = taskSlice.actions;

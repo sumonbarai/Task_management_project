@@ -62,7 +62,7 @@ const VerifyOTP = () => {
             6 digit verification code has been send your email address
           </p>
           <form className="row g-3 " onSubmit={handleSubmit}>
-            <div className="col-12 animate__animated animate__fadeInUp">
+            <div className="col-12 animate__animated animate__fadeInUp ">
               <ReactCodeInput type="text" fields={6} onChange={handleChange} />
             </div>
 

@@ -3,10 +3,8 @@ import Swal from "sweetalert2";
 import { errorNotification } from "./NotificationHelper";
 import store from "../redux/store/store";
 import { deleteTask, updateTask } from "../redux/features/task/taskSlice";
-import { getLocalStorage } from "./SessionHelper";
 
 const DeleteAlert = (_id, status) => {
-  const user = getLocalStorage("user");
   Swal.fire({
     title: "Are you sure?",
     icon: "warning",
@@ -16,11 +14,7 @@ const DeleteAlert = (_id, status) => {
     confirmButtonText: "Yes, delete it!",
   }).then(async (result) => {
     if (result.isConfirmed) {
-      const response = await axios.delete(`/deleteTask/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const response = await axios.delete(`/deleteTask/${_id}`);
       if (response.status === 200) {
         Swal.fire("Deleted!", "Your Task has been deleted.", "success");
         // update redux store
@@ -33,7 +27,6 @@ const DeleteAlert = (_id, status) => {
   });
 };
 const updateAlert = (_id, status) => {
-  const user = getLocalStorage("user");
   Swal.fire({
     title: "Change Status",
     input: "select",
@@ -48,12 +41,7 @@ const updateAlert = (_id, status) => {
     if (result) {
       const response = await axios.patch(
         `updateTaskByStatus/${_id}/${result.value}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
+        {}
       );
       if (response.status === 200) {
         Swal.fire("Updated!", "Your Task has been Updated.", "success");
