@@ -30,6 +30,7 @@ function App() {
 
   // axios.defaults.baseURL = "http://localhost:9000/api/v1";
   axios.defaults.headers.common["Authorization"] = `Bearer ${user?.token}`;
+  console.log("render app");
 
   return !authChecked ? (
     "AuthChecking"
