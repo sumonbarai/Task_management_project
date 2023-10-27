@@ -16,10 +16,13 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading, dashboard, error } = useSelector((state) => state.task);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(taskByStatusCountThank());
-  }, [dispatch]);
+    if (user?.token) {
+      dispatch(taskByStatusCountThank());
+    }
+  }, [dispatch, user?.token]);
 
   // if user token has expired
   useEffect(() => {
