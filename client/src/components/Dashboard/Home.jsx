@@ -19,7 +19,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(taskByStatusCountThank());
-  }, []);
+  }, [dispatch]);
 
   // if user token has expired
   useEffect(() => {

@@ -58,7 +58,7 @@ const Login = () => {
 
             if (result) {
               successNotification("login success");
-              window.location.href = "/";
+              navigate("/");
             }
           }
         })
