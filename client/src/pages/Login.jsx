@@ -11,8 +11,8 @@ import Loader from "../components/Loader/Loader";
 import { setLocalStorage } from "../utilities/SessionHelper";
 
 const initialState = {
-  email: "",
-  password: "",
+  email: "sumonbarai78@gmail.com",
+  password: "123456",
 };
 const Login = () => {
   const [data, setData] = useState(initialState);
