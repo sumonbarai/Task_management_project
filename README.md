@@ -1,0 +1,1 @@
+I am complete task manager application, built with React and Node.js, provides users with a user-friendly interface to efficiently manage their tasks. Users can create, edit, and delete tasks, offering a seamless and organized way to keep track of their responsibilities
